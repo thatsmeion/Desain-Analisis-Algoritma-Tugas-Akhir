@@ -6,7 +6,7 @@ def jarak(p1, p2):
 def jarakTerdekatStrip(strip, d, pasangan_terdekat):
     print(f"    [Strip diurutkan berdasarkan Y]: {strip}")
     min_jarak = d
-    strip.sort(key=lambda point: point[1])
+    strip.sort(key=lambda point: point[1]) #lambda untuk mengurutkan berdasarkan value tertentu, disini berdasarkan sumbu y
     for i in range(len(strip)):
         for j in range(i + 1, len(strip)):
             if (strip[j][1] - strip[i][1]) < min_jarak:
@@ -21,7 +21,7 @@ def jarakTerdekatStrip(strip, d, pasangan_terdekat):
 
 def minDistUtil(titik, kiri, kanan, pasangan_terdekat, level=0):
     indentasi = "  " * level
-    if kanan - kiri <= 2:
+    if kanan - kiri <= 2: #ini base case
         print(f"{indentasi}Brute force: {titik[kiri:kanan]}")
         min_jarak = float('inf')
         for i in range(kiri, kanan):
@@ -33,12 +33,12 @@ def minDistUtil(titik, kiri, kanan, pasangan_terdekat, level=0):
                     pasangan_terdekat[0] = (titik[i], titik[j])
         return min_jarak
 
-    mid = (kiri + kanan) // 2
+    mid = (kiri + kanan) // 2 #ini divide
     mid_x = titik[mid][0]
     print(f"{indentasi}Divide: kiri={titik[kiri:mid]}, kanan={titik[mid:kanan]} (mid_x = {mid_x})")
 
-    jarak_kiri = minDistUtil(titik, kiri, mid, pasangan_terdekat, level + 1)
-    jarak_kanan = minDistUtil(titik, mid, kanan, pasangan_terdekat, level + 1)
+    jarak_kiri = minDistUtil(titik, kiri, mid, pasangan_terdekat, level + 1) #ini rekursif
+    jarak_kanan = minDistUtil(titik, mid, kanan, pasangan_terdekat, level + 1) #ini rekursif
 
     d = min(jarak_kiri, jarak_kanan)
     print(f"{indentasi}Jarak minimum kiri={jarak_kiri:.6f}, kanan={jarak_kanan:.6f}, sementara d = {d:.6f}")
@@ -55,7 +55,7 @@ def minDistUtil(titik, kiri, kanan, pasangan_terdekat, level=0):
     return min(d, strip_jarak)
 
 def jarakTerdekat(titik):
-    titik.sort(key=lambda point: point[0])
+    titik.sort(key=lambda point: point[0]) #lambda disini untuk mengurutkan berdasarkan value koordinat x
     pasangan_terdekat = [None]
     hasil = minDistUtil(titik, 0, len(titik), pasangan_terdekat)
     return hasil, pasangan_terdekat[0]
