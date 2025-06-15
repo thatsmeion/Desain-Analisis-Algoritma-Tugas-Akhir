@@ -1,4 +1,5 @@
 import math
+import time
 
 def jarak(p1, p2):
     return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
@@ -19,7 +20,7 @@ def jarakTerdekatStrip(strip, d, pasangan_terdekat):
                 break
     return min_jarak
 
-def minDistUtil(titik, kiri, kanan, pasangan_terdekat, level=0):
+def rekursifJarakTerdekat(titik, kiri, kanan, pasangan_terdekat, level=0):
     indentasi = "  " * level
     if kanan - kiri <= 2: #ini base case
         print(f"{indentasi}Brute force: {titik[kiri:kanan]}")
@@ -37,8 +38,8 @@ def minDistUtil(titik, kiri, kanan, pasangan_terdekat, level=0):
     mid_x = titik[mid][0]
     print(f"{indentasi}Divide: kiri={titik[kiri:mid]}, kanan={titik[mid:kanan]} (mid_x = {mid_x})")
 
-    jarak_kiri = minDistUtil(titik, kiri, mid, pasangan_terdekat, level + 1) #ini rekursif
-    jarak_kanan = minDistUtil(titik, mid, kanan, pasangan_terdekat, level + 1) #ini rekursif
+    jarak_kiri = rekursifJarakTerdekat(titik, kiri, mid, pasangan_terdekat, level + 1) #ini rekursif
+    jarak_kanan = rekursifJarakTerdekat(titik, mid, kanan, pasangan_terdekat, level + 1) #ini rekursif
 
     d = min(jarak_kiri, jarak_kanan)
     print(f"{indentasi}Jarak minimum kiri={jarak_kiri:.6f}, kanan={jarak_kanan:.6f}, sementara d = {d:.6f}")
@@ -57,15 +58,28 @@ def minDistUtil(titik, kiri, kanan, pasangan_terdekat, level=0):
 def jarakTerdekat(titik):
     titik.sort(key=lambda point: point[0]) #lambda disini untuk mengurutkan berdasarkan value koordinat x
     pasangan_terdekat = [None]
-    hasil = minDistUtil(titik, 0, len(titik), pasangan_terdekat)
+    hasil = rekursifJarakTerdekat(titik, 0, len(titik), pasangan_terdekat)
     return hasil, pasangan_terdekat[0]
 
 
 
 titik = [
-    [-72, -63], [29, -57], [-66, -25], [-5, -84], [13, 73],
-    [-30, 91], [83, -96], [7, 43], [71, 2]
+    [5, 12], [10, 20], [12, 17], [15, 24], [20, 20],
+    [22, 25], [25, 22], [30, 18], [33, 27], [35, 30],
+    [37, 29], [40, 38], [42, 35], [45, 33], [48, 39],
+    [50, 40], [52, 44], [53, 42], [55, 45], [58, 47],
+    [60, 50], [61, 49], [63, 53], [65, 55], [66, 54],
+    [67, 57], [68, 56], [70, 60], [71, 59], [72, 62],
+    [73, 61], [75, 65], [76, 63], [77, 66], [78, 67],
+    [80, 70], [81, 69], [83, 71], [84, 72], [85, 74],
+    [86, 73], [87, 75], [88, 76], [89, 78], [90, 80],
+    [92, 82], [93, 83], [95, 85], [97, 87], [100, 90]
 ]
+
+start_time = time.perf_counter()
 hasil_jarak, pasangan = jarakTerdekat(titik)
+end_time = time.perf_counter()  
+
 print(f'\nJarak terdekat: {hasil_jarak:.6f}')
 print(f'Pasangan titik terdekat: {pasangan[0]} dan {pasangan[1]}')
+print(f'Waktu eksekusi: {(end_time - start_time):.6f} detik')
